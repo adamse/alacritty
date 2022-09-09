@@ -198,6 +198,9 @@ pub enum Action {
     /// Clear active selection.
     ClearSelection,
 
+    /// Copy and clear the selection, or paste of the selection is empty
+    CopyAndClearOrPasteSelection,
+
     /// Toggle vi mode.
     ToggleViMode,
 
