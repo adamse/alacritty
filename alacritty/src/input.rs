@@ -283,6 +283,17 @@ impl<T: EventListener> Execute<T> for Action {
             #[cfg(not(any(target_os = "macos", windows)))]
             Action::CopySelection => ctx.copy_selection(ClipboardType::Selection),
             Action::ClearSelection => ctx.clear_selection(),
+            Action::CopyAndClearOrPasteSelection => {
+                if !ctx.selection_is_empty() {
+                    // selection is not empty, copy and clear it
+                    ctx.copy_selection(ClipboardType::Clipboard);
+                    ctx.clear_selection();
+                } else {
+                    // selection is empty, paste
+                    let text = ctx.clipboard_mut().load(ClipboardType::Clipboard);
+                    ctx.paste(&text, true);
+                }
+            },
             Action::Paste => {
                 let text = ctx.clipboard_mut().load(ClipboardType::Clipboard);
                 ctx.paste(&text, true);
